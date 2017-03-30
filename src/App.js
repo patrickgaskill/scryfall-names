@@ -1,53 +1,59 @@
 import React, { Component } from 'react';
-import { Grid, Container, Header, Form, Input, Segment, Message } from 'semantic-ui-react';
+import { Grid, Container, Header, Form, Input, Segment, Message, Loader } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 class App extends Component {
   state = {
     loading: false,
-    results: null,
-    totalCards: null,
-    hasMore: null,
-    nextPage: null,
-    warnings: null,
+    results: [],
   };
 
-  fetchScryfallResults = (query) => {
-    fetch(`https://api.scryfall.com/cards/search?q=${query}`)
+  fetchFromScryfall = (url) => {
+    const { results } = this.state;
+    fetch(url)
       .then(response => response.json())
       .then(json => {
         this.setState({
-          loading: false,
-          results: json.data.map(c => c.name),
+          loading: json.has_more,
+          results: results.concat(json.data.map(c => c.name)),
           totalCards: json.total_cards,
           hasMore: json.has_more,
-          nextPage: json.next_page,
           warnings: json.warnings,
+        }, () => {
+          if (json.has_more) {
+            window.setTimeout(() => {
+              this.fetchFromScryfall(json.next_page);
+            }, 50);
+          }
         });
       })
       .catch(error => {
         this.setState({ loading: false });
-        console.error(error)
+        console.error(error);
       });
   }
 
   handleSearchSubmit = (e) => {
     e.preventDefault();
     const query = this.searchInput.inputRef.value;
-    this.setState({ loading: true}, () => {
-      this.fetchScryfallResults(query);
+    this.setState({
+      loading: true,
+      results: []
+    }, () => {
+      this.fetchFromScryfall(`https://api.scryfall.com/cards/search?q=${query}`);
     });
   }
 
   renderSearchResults = () => {
-    const { results, totalCards } = this.state;
+    const { results, totalCards, hasMore, loading } = this.state;
     return (
       <Grid.Row>
         <Grid.Column>
           <Container>
-            <Message attached='top'>{totalCards} card{totalCards > 1 && 's'}</Message>
+            <Message attached>{totalCards} card{totalCards > 1 && 's'}</Message>
             <Segment attached>
               {results.map((r, i) => <span key={i}>{r}<br /></span>)}
+              {loading && hasMore && <Loader active inline='centered' />}
             </Segment>
           </Container>
         </Grid.Column>
@@ -56,14 +62,14 @@ class App extends Component {
    }
 
   render() {
-    const { loading, results } = this.state;
+    const { loading, results, warnings } = this.state;
     return (
       <Grid padded>
         <Grid.Row>
           <Grid.Column>
             <Container>
-              <Header as='h1'>Export a list</Header>
-              <Form onSubmit={this.handleSearchSubmit}>
+              <Header as='h1'>Fetch some card names from Scryfall</Header>
+              <Form warning={warnings && warnings.length} onSubmit={this.handleSearchSubmit}>
                 <Input fluid
                   ref={node => {this.searchInput = node}}
                   icon='search' 
@@ -76,11 +82,12 @@ class App extends Component {
                     loading,
                   }}
                 />
+                <Message warning header='Scryfall had some warnings for you.' list={warnings} />
               </Form>
             </Container>
           </Grid.Column>
         </Grid.Row>
-        {results && this.renderSearchResults()}
+        {results.length > 0 && this.renderSearchResults()}
       </Grid>
     );
   }
