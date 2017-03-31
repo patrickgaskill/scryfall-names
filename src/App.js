@@ -58,8 +58,8 @@ class App extends Component {
           </Container>
         </Grid.Column>
       </Grid.Row>
-      );
-   }
+    );
+  }
 
   render() {
     const { loading, results, warnings } = this.state;
