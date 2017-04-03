@@ -9,17 +9,16 @@ class App extends Component {
   };
 
   fetchFromScryfall = (url) => {
-    const { results } = this.state;
     fetch(url)
       .then(response => response.json())
       .then(json => {
-        this.setState({
+        this.setState((prevState) => ({
           loading: json.has_more,
-          results: results.concat(json.data.map(c => c.name)),
+          results: prevState.results.concat(json.data.map(c => c.name)),
           totalCards: json.total_cards,
           hasMore: json.has_more,
           warnings: json.warnings,
-        }, () => {
+        }), () => {
           if (json.has_more) {
             window.setTimeout(() => {
               this.fetchFromScryfall(json.next_page);
