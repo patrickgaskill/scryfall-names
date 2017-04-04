@@ -1,47 +1,67 @@
-import React, { Component } from 'react';
-import { Grid, Container, Header, Form, Input, Segment, Message, Loader } from 'semantic-ui-react';
-import 'semantic-ui-css/semantic.min.css';
+import React, { Component } from "react";
+import {
+  Grid,
+  Container,
+  Header,
+  Form,
+  Input,
+  Segment,
+  Message,
+  Loader
+} from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 
 class App extends Component {
   state = {
     loading: false,
-    results: [],
+    results: []
   };
 
-  fetchFromScryfall = (url) => {
+  fetchFromScryfall = url => {
     fetch(url)
       .then(response => response.json())
       .then(json => {
-        this.setState((prevState) => ({
-          loading: json.has_more,
-          results: prevState.results.concat(json.data.map(c => c.name)),
-          totalCards: json.total_cards,
-          hasMore: json.has_more,
-          warnings: json.warnings,
-        }), () => {
-          if (json.has_more) {
-            window.setTimeout(() => {
-              this.fetchFromScryfall(json.next_page);
-            }, 50);
+        this.setState(
+          prevState => ({
+            loading: json.has_more,
+            results: prevState.results.concat(json.data.map(c => c.name)),
+            totalCards: json.total_cards,
+            hasMore: json.has_more,
+            warnings: json.warnings
+          }),
+          () => {
+            if (json.has_more) {
+              window.setTimeout(
+                () => {
+                  this.fetchFromScryfall(json.next_page);
+                },
+                50
+              );
+            }
           }
-        });
+        );
       })
       .catch(error => {
         this.setState({ loading: false });
         console.error(error);
       });
-  }
+  };
 
-  handleSearchSubmit = (e) => {
+  handleSearchSubmit = e => {
     e.preventDefault();
     const query = this.searchInput.inputRef.value;
-    this.setState({
-      loading: true,
-      results: []
-    }, () => {
-      this.fetchFromScryfall(`https://api.scryfall.com/cards/search?q=${query}`);
-    });
-  }
+    this.setState(
+      {
+        loading: true,
+        results: []
+      },
+      () => {
+        this.fetchFromScryfall(
+          `https://api.scryfall.com/cards/search?q=${query}`
+        );
+      }
+    );
+  };
 
   renderSearchResults = () => {
     const { results, totalCards, hasMore, loading } = this.state;
@@ -49,7 +69,7 @@ class App extends Component {
       <Grid.Row>
         <Grid.Column>
           <Container>
-            <Message attached>{totalCards} card{totalCards > 1 && 's'}</Message>
+            <Message attached>{totalCards} card{totalCards > 1 && "s"}</Message>
             <Segment attached>
               {results.map((r, i) => <span key={i}>{r}<br /></span>)}
               {loading && hasMore && <Loader active inline="centered" />}
@@ -58,7 +78,7 @@ class App extends Component {
         </Grid.Column>
       </Grid.Row>
     );
-  }
+  };
 
   render() {
     const { loading, results, warnings } = this.state;
@@ -68,9 +88,15 @@ class App extends Component {
           <Grid.Column>
             <Container>
               <Header as="h1">Fetch some card names from Scryfall</Header>
-              <Form warning={warnings && warnings.length} onSubmit={this.handleSearchSubmit}>
-                <Input fluid
-                  ref={node => {this.searchInput = node}}
+              <Form
+                warning={warnings && warnings.length}
+                onSubmit={this.handleSearchSubmit}
+              >
+                <Input
+                  fluid
+                  ref={node => {
+                    this.searchInput = node;
+                  }}
                   icon="search"
                   iconPosition="left"
                   placeholder="Enter a Scryfall search..."
@@ -78,10 +104,14 @@ class App extends Component {
                     primary: true,
                     content: "Search",
                     onClick: this.handleSearchSubmit,
-                    loading,
+                    loading
                   }}
                 />
-                <Message warning header="Scryfall had some warnings for you." list={warnings} />
+                <Message
+                  warning
+                  header="Scryfall had some warnings for you."
+                  list={warnings}
+                />
               </Form>
             </Container>
           </Grid.Column>
