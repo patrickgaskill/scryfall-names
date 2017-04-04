@@ -52,7 +52,7 @@ class App extends Component {
             <Message attached>{totalCards} card{totalCards > 1 && 's'}</Message>
             <Segment attached>
               {results.map((r, i) => <span key={i}>{r}<br /></span>)}
-              {loading && hasMore && <Loader active inline='centered' />}
+              {loading && hasMore && <Loader active inline="centered" />}
             </Segment>
           </Container>
         </Grid.Column>
@@ -67,21 +67,21 @@ class App extends Component {
         <Grid.Row>
           <Grid.Column>
             <Container>
-              <Header as='h1'>Fetch some card names from Scryfall</Header>
+              <Header as="h1">Fetch some card names from Scryfall</Header>
               <Form warning={warnings && warnings.length} onSubmit={this.handleSearchSubmit}>
                 <Input fluid
                   ref={node => {this.searchInput = node}}
-                  icon='search' 
-                  iconPosition='left' 
-                  placeholder='Enter a Scryfall search...'
+                  icon="search"
+                  iconPosition="left"
+                  placeholder="Enter a Scryfall search..."
                   action={{
                     primary: true,
-                    content: 'Search',
+                    content: "Search",
                     onClick: this.handleSearchSubmit,
                     loading,
                   }}
                 />
-                <Message warning header='Scryfall had some warnings for you.' list={warnings} />
+                <Message warning header="Scryfall had some warnings for you." list={warnings} />
               </Form>
             </Container>
           </Grid.Column>
