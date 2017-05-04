@@ -13,6 +13,7 @@ import "semantic-ui-css/semantic.min.css";
 
 class App extends Component {
   state = {
+    query: "",
     loading: false,
     results: []
   };
@@ -31,12 +32,9 @@ class App extends Component {
           }),
           () => {
             if (json.has_more) {
-              window.setTimeout(
-                () => {
-                  this.fetchFromScryfall(json.next_page);
-                },
-                50
-              );
+              window.setTimeout(() => {
+                this.fetchFromScryfall(json.next_page);
+              }, 50);
             }
           }
         );
@@ -47,18 +45,21 @@ class App extends Component {
       });
   };
 
-  handleSearchSubmit = e => {
-    e.preventDefault();
-    const query = this.searchInput.inputRef.value;
+  handleChange = event => {
+    this.setState({ query: event.target.value });
+  };
+
+  handleSearchSubmit = event => {
+    event.preventDefault();
+    const { query } = this.state;
     this.setState(
       {
         loading: true,
         results: []
       },
       () => {
-        this.fetchFromScryfall(
-          `https://api.scryfall.com/cards/search?q=${query}`
-        );
+        this
+          .fetchFromScryfall(`https://api.scryfall.com/cards/search?q=${query}`);
       }
     );
   };
@@ -94,12 +95,11 @@ class App extends Component {
               >
                 <Input
                   fluid
-                  ref={node => {
-                    this.searchInput = node;
-                  }}
+                  value={this.state.query}
                   icon="search"
                   iconPosition="left"
                   placeholder="Enter a Scryfall search..."
+                  onChange={this.handleChange}
                   action={{
                     primary: true,
                     content: "Search",
