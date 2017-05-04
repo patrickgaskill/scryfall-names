@@ -18,31 +18,31 @@ class App extends Component {
     results: []
   };
 
-  fetchFromScryfall = url => {
-    fetch(url)
-      .then(response => response.json())
-      .then(json => {
-        this.setState(
-          prevState => ({
-            loading: json.has_more,
-            results: prevState.results.concat(json.data.map(c => c.name)),
-            totalCards: json.total_cards,
-            hasMore: json.has_more,
-            warnings: json.warnings
-          }),
-          () => {
-            if (json.has_more) {
-              window.setTimeout(() => {
-                this.fetchFromScryfall(json.next_page);
-              }, 50);
-            }
+  fetchFromScryfall = async url => {
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+
+      this.setState(
+        prevState => ({
+          loading: json.has_more,
+          results: [...prevState.results, ...json.data.map(card => card.name)],
+          totalCards: json.total_cards,
+          hasMore: json.has_more,
+          warnings: json.warnings
+        }),
+        () => {
+          if (json.has_more) {
+            window.setTimeout(() => {
+              this.fetchFromScryfall(json.next_page);
+            }, 50);
           }
-        );
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-        console.error(error);
-      });
+        }
+      );
+    } catch (e) {
+      this.setState({ loading: false });
+      console.error(e);
+    }
   };
 
   handleChange = event => {
@@ -51,7 +51,6 @@ class App extends Component {
 
   handleSearchSubmit = event => {
     event.preventDefault();
-    const { query } = this.state;
     this.setState(
       {
         loading: true,
@@ -59,7 +58,7 @@ class App extends Component {
       },
       () => {
         this
-          .fetchFromScryfall(`https://api.scryfall.com/cards/search?q=${query}`);
+          .fetchFromScryfall(`https://api.scryfall.com/cards/search?q=${this.state.query}`);
       }
     );
   };
