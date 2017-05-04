@@ -40,7 +40,7 @@ class App extends Component {
         }
       );
     } catch (e) {
-      this.setState({ loading: false });
+      this.setState({ loading: false, errors: [e.message] });
       console.error(e);
     }
   };
@@ -81,7 +81,7 @@ class App extends Component {
   };
 
   render() {
-    const { loading, results, warnings } = this.state;
+    const { loading, results, errors, warnings } = this.state;
     return (
       <Grid padded>
         <Grid.Row>
@@ -90,6 +90,7 @@ class App extends Component {
               <Header as="h1">Fetch some card names from Scryfall</Header>
               <Form
                 warning={warnings && warnings.length}
+                error={errors && errors.length}
                 onSubmit={this.handleSearchSubmit}
               >
                 <Input
@@ -106,6 +107,7 @@ class App extends Component {
                     loading
                   }}
                 />
+                <Message error header="There were some errors." list={errors} />
                 <Message
                   warning
                   header="Scryfall had some warnings for you."
@@ -115,7 +117,7 @@ class App extends Component {
             </Container>
           </Grid.Column>
         </Grid.Row>
-        {results.length > 0 && this.renderSearchResults()}
+        {results.length && this.renderSearchResults()}
       </Grid>
     );
   }
