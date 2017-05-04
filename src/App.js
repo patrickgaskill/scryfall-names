@@ -89,8 +89,8 @@ class App extends Component {
             <Container>
               <Header as="h1">Fetch some card names from Scryfall</Header>
               <Form
-                warning={warnings && warnings.length}
-                error={errors && errors.length}
+                warning={warnings && warnings.length > 0}
+                error={errors && errors.length > 0}
                 onSubmit={this.handleSearchSubmit}
               >
                 <Input
@@ -117,7 +117,7 @@ class App extends Component {
             </Container>
           </Grid.Column>
         </Grid.Row>
-        {results.length && this.renderSearchResults()}
+        {results.length > 0 && this.renderSearchResults()}
       </Grid>
     );
   }
