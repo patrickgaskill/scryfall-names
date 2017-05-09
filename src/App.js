@@ -33,6 +33,8 @@ class App extends Component {
         }),
         () => {
           if (json.has_more) {
+            // Using a 50 ms delay as requested in the docs
+            // https://scryfall.com/docs/api-overview
             window.setTimeout(() => {
               this.fetchFromScryfall(json.next_page);
             }, 50);
