@@ -15,7 +15,8 @@ class App extends Component {
   state = {
     query: "",
     loading: false,
-    results: []
+    results: [],
+    warnings: []
   };
 
   fetchFromScryfall = async url => {
@@ -30,6 +31,8 @@ class App extends Component {
           totalCards: json.total_cards,
           hasMore: json.has_more,
           warnings: json.warnings
+            ? [...prevState.warnings, ...json.warnings]
+            : prevState.warnings
         }),
         () => {
           if (json.has_more) {
@@ -59,8 +62,9 @@ class App extends Component {
         results: []
       },
       () => {
-        this
-          .fetchFromScryfall(`https://api.scryfall.com/cards/search?q=${this.state.query}`);
+        this.fetchFromScryfall(
+          `https://api.scryfall.com/cards/search?q=${this.state.query}`
+        );
       }
     );
   };
