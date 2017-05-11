@@ -7,7 +7,8 @@ import {
   Input,
   Segment,
   Message,
-  Loader
+  Loader,
+  Progress
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
@@ -77,6 +78,7 @@ class App extends Component {
           <Container>
             <Message attached>{totalCards} card{totalCards > 1 && "s"}</Message>
             <Segment attached>
+              {loading && <Progress indicating value={results.length} total={totalCards} />}
               {results.map((r, i) => <span key={i}>{r}<br /></span>)}
               {loading && hasMore && <Loader active inline="centered" />}
             </Segment>
