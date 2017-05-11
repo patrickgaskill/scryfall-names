@@ -17,7 +17,8 @@ class App extends Component {
     query: "",
     loading: false,
     results: [],
-    warnings: []
+    warnings: [],
+    totalCards: 0
   };
 
   fetchFromScryfall = async url => {
@@ -32,8 +33,6 @@ class App extends Component {
           totalCards: json.total_cards,
           hasMore: json.has_more,
           warnings: json.warnings
-            ? [...prevState.warnings, ...json.warnings]
-            : prevState.warnings
         }),
         () => {
           if (json.has_more) {
@@ -78,7 +77,7 @@ class App extends Component {
           <Container>
             <Message attached>{totalCards} card{totalCards > 1 && "s"}</Message>
             <Segment attached>
-              {loading && <Progress indicating value={results.length} total={totalCards} />}
+              {loading && <Progress indicating value={results.length} total={totalCards} attached="top" />}
               {results.map((r, i) => <span key={i}>{r}<br /></span>)}
               {loading && hasMore && <Loader active inline="centered" />}
             </Segment>
