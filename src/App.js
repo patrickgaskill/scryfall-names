@@ -77,7 +77,12 @@ class App extends Component {
           <Container text>
             <Message attached>{totalCards} card{totalCards > 1 && "s"}</Message>
             <Segment attached>
-              {loading && <Progress indicating percent={Math.floor(results.length / totalCards * 100)} attached="top" />}
+              {loading &&
+                <Progress
+                  indicating
+                  percent={Math.floor(results.length / totalCards * 100)}
+                  attached="top"
+                />}
               {results.map((r, i) => <span key={i}>{r}<br /></span>)}
               {loading && hasMore && <Loader active inline="centered" />}
             </Segment>
