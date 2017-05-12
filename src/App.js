@@ -50,7 +50,7 @@ class App extends Component {
     }
   };
 
-  handleChange = event => {
+  handleQueryChange = event => {
     this.setState({ query: event.target.value });
   };
 
@@ -75,7 +75,9 @@ class App extends Component {
       <Grid.Row>
         <Grid.Column>
           <Container text>
-            <Message attached>{totalCards} card{totalCards > 1 && "s"}</Message>
+            <Message attached>
+              {`Found ${totalCards} card${totalCards > 1 && "s"}.`}
+            </Message>
             <Segment attached>
               {loading &&
                 <Progress
@@ -111,7 +113,7 @@ class App extends Component {
                   icon="search"
                   iconPosition="left"
                   placeholder="Enter a Scryfall search..."
-                  onChange={this.handleChange}
+                  onChange={this.handleQueryChange}
                   action={{
                     primary: true,
                     content: "Search",
