@@ -74,7 +74,7 @@ class App extends Component {
     return (
       <Grid.Row>
         <Grid.Column>
-          <Container>
+          <Container text>
             <Message attached>{totalCards} card{totalCards > 1 && "s"}</Message>
             <Segment attached>
               {loading && <Progress indicating percent={Math.floor(results.length / totalCards * 100)} attached="top" />}
@@ -93,7 +93,7 @@ class App extends Component {
       <Grid padded>
         <Grid.Row>
           <Grid.Column>
-            <Container>
+            <Container text>
               <Header as="h1">Fetch some card names from Scryfall</Header>
               <Form
                 warning={warnings && warnings.length > 0}
