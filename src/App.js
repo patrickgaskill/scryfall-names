@@ -103,8 +103,8 @@ class App extends Component {
             <Container text>
               <Header as="h1">Fetch some card names from Scryfall</Header>
               <Form
-                warning={warnings && warnings.length > 0}
-                error={errors && errors.length > 0}
+                warning={warnings.length > 0}
+                error={errors.length > 0}
                 onSubmit={this.handleSearchSubmit}
               >
                 <Input
