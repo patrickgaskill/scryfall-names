@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Grid,
   Container,
   Header,
   Form,
@@ -76,73 +75,65 @@ class App extends Component {
   renderSearchResults = () => {
     const { results, totalCards, hasMore, loading } = this.state;
     return (
-      <Grid.Row>
-        <Grid.Column>
-          <Container text>
-            <Message attached>
-              {`Found ${totalCards} card${totalCards > 1 ? "s" : ""}.`}
-            </Message>
-            <Segment attached>
-              {loading && (
-                <Progress
-                  indicating
-                  percent={Math.floor(results.length / totalCards * 100)}
-                  attached="top"
-                />
-              )}
-              {results.map((r, i) => (
-                <span key={i}>
-                  {r}
-                  <br />
-                </span>
-              ))}
-              {loading && hasMore && <Loader active inline="centered" />}
-            </Segment>
-          </Container>
-        </Grid.Column>
-      </Grid.Row>
+      <div>
+        <Message attached>
+          {`Found ${totalCards} card${totalCards > 1 ? "s" : ""}.`}
+        </Message>
+        <Segment attached>
+          {loading && (
+            <Progress
+              indicating
+              percent={Math.floor(results.length / totalCards * 100)}
+              attached="top"
+            />
+          )}
+          {results.map((r, i) => (
+            <span key={i}>
+              {r}
+              <br />
+            </span>
+          ))}
+          {loading && hasMore && <Loader active inline="centered" />}
+        </Segment>
+      </div>
     );
   };
 
   render() {
     const { loading, results, errors, warnings } = this.state;
     return (
-      <Grid padded>
-        <Grid.Row>
-          <Grid.Column>
-            <Container text>
-              <Header as="h1">Fetch some card names from Scryfall</Header>
-              <Form
-                warning={warnings.length > 0}
-                error={errors.length > 0}
-                onSubmit={this.handleSearchSubmit}
-              >
-                <Input
-                  fluid
-                  value={this.state.query}
-                  icon="search"
-                  iconPosition="left"
-                  placeholder="Enter a Scryfall search..."
-                  onChange={this.handleQueryChange}
-                  action={{
-                    primary: true,
-                    content: "Search",
-                    onClick: this.handleSearchSubmit,
-                    loading
-                  }}
-                />
-                <Message error header="There were some errors." list={errors} />
-                <Message
-                  warning
-                  header="Scryfall had some warnings for you."
-                  list={warnings}
-                />
-              </Form>
-            </Container>
-          </Grid.Column>
-        </Grid.Row>
+      <Container text>
+        <Segment basic>
+          <Header as="h1">Fetch some card names from Scryfall</Header>
+          <Form
+            warning={warnings.length > 0}
+            error={errors.length > 0}
+            onSubmit={this.handleSearchSubmit}
+          >
+            <Input
+              fluid
+              value={this.state.query}
+              icon="search"
+              iconPosition="left"
+              placeholder="Enter a Scryfall search..."
+              onChange={this.handleQueryChange}
+              action={{
+                primary: true,
+                content: "Search",
+                onClick: this.handleSearchSubmit,
+                loading
+              }}
+            />
+            <Message error header="There were some errors." list={errors} />
+            <Message
+              warning
+              header="Scryfall had some warnings for you."
+              list={warnings}
+            />
+          </Form>
+        </Segment>
         {results.length > 0 && this.renderSearchResults()}
-      </Grid>
+      </Container>
     );
   }
 }
