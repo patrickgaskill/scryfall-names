@@ -18,6 +18,7 @@ class App extends Component {
     loading: false,
     results: [],
     warnings: [],
+    errors: [],
     totalCards: 0
   };
 
@@ -29,10 +30,13 @@ class App extends Component {
       this.setState(
         prevState => ({
           loading: json.has_more,
-          results: [...prevState.results, ...json.data.map(card => card.name)],
+          results: [
+            ...prevState.results,
+            ...(json.data ? json.data.map(card => card.name) : [])
+          ],
           totalCards: json.total_cards,
           hasMore: json.has_more,
-          warnings: json.warnings
+          warnings: json.warnings || []
         }),
         () => {
           if (json.has_more) {
@@ -76,16 +80,22 @@ class App extends Component {
         <Grid.Column>
           <Container text>
             <Message attached>
-              {`Found ${totalCards} card${totalCards > 1 && "s"}.`}
+              {`Found ${totalCards} card${totalCards > 1 ? "s" : ""}.`}
             </Message>
             <Segment attached>
-              {loading &&
+              {loading && (
                 <Progress
                   indicating
                   percent={Math.floor(results.length / totalCards * 100)}
                   attached="top"
-                />}
-              {results.map((r, i) => <span key={i}>{r}<br /></span>)}
+                />
+              )}
+              {results.map((r, i) => (
+                <span key={i}>
+                  {r}
+                  <br />
+                </span>
+              ))}
               {loading && hasMore && <Loader active inline="centered" />}
             </Segment>
           </Container>
