@@ -83,7 +83,8 @@ class App extends Component {
           {loading && (
             <Progress
               indicating
-              percent={Math.floor(results.length / totalCards * 100)}
+              total={totalCards}
+              value={results.length}
               attached="top"
             />
           )}
