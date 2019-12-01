@@ -18,7 +18,6 @@ const initialState = {
 };
 
 function reducer(state, action) {
-  console.log(action.type, action);
   switch (action.type) {
     case "submit": {
       return { ...initialState, loading: true };
