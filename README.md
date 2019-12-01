@@ -6,5 +6,7 @@ You can try it out at https://patrickgaskill.github.io/scryfall-names/ .
 
 If you’d like to run this on your own machine, clone this repo and then:
 
+```
 yarn
 yarn start
+```
