@@ -11,19 +11,19 @@ import {
   Progress
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import { ScryfallResponse } from "./types";
+import { Card, ScryfallResponse } from "./types";
 
 type State = {
   loading: boolean;
   warnings: string[];
   error: string | null;
-  cards: string[];
+  cards: Card[];
   totalCards: number | null;
 };
 
 type Action =
   | { type: "submit" }
-  | { type: "success"; cards: string[]; totalCards: number }
+  | { type: "success"; cards: Card[]; totalCards: number }
   | { type: "warning"; warnings: string[] }
   | { type: "finished" }
   | { type: "error"; error: string };
@@ -92,7 +92,7 @@ function App() {
 
     dispatch({
       type: "success",
-      cards: data.map(card => card.name),
+      cards: data,
       totalCards: total_cards
     });
 
@@ -187,9 +187,9 @@ function App() {
                     attached="top"
                   />
                 )}
-                {cards.map(name => (
-                  <Fragment key={name}>
-                    <span>{name}</span>
+                {cards.map(card => (
+                  <Fragment key={card.id}>
+                    <span>{card.name}</span>
                     <br />
                   </Fragment>
                 ))}
