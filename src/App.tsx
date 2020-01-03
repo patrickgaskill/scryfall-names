@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useReducer } from "react";
+import React, { Fragment, useState, useReducer, useEffect } from "react";
 import {
   Container,
   Grid,
@@ -6,6 +6,8 @@ import {
   Header,
   Form,
   Message,
+  Popup,
+  Icon,
   Progress
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
@@ -65,6 +67,7 @@ function reducer(state: State, action: Action) {
 
 function App() {
   const [query, setQuery] = useState("");
+  const [copied, setCopied] = useState(false);
   const [
     { loading, warnings, error, cards, totalCards },
     dispatch
@@ -114,6 +117,15 @@ function App() {
     }
   }
 
+  async function handleCopyClick() {
+    await navigator.clipboard.writeText(cards.join("\n"));
+    setCopied(true);
+  }
+
+  useEffect(() => {
+    setCopied(false);
+  }, [cards]);
+
   return (
     <Container text>
       <Grid padded>
@@ -131,7 +143,7 @@ function App() {
                   icon="search"
                   placeholder="Enter a Scryfall query, like t:goblin"
                   value={query}
-                  onChange={e => setQuery(e.target.value)}
+                  onChange={event => setQuery(event.target.value)}
                 />
               </Form.Field>
             </Form>
@@ -143,7 +155,28 @@ function App() {
           <Grid.Row>
             <Grid.Column>
               <Message attached>
-                {totalCards} {totalCards > 1 ? "cards" : "card"} found.
+                <Grid columns="equal">
+                  <Grid.Row style={{ padding: 0 }}>
+                    <Grid.Column>
+                      {totalCards} {totalCards > 1 ? "cards" : "card"} found.
+                    </Grid.Column>
+                    <Grid.Column textAlign="right">
+                      <Popup
+                        content={copied ? "Copied!" : "Copy to clipboard"}
+                        position="top center"
+                        size="mini"
+                        inverted
+                        trigger={
+                          <Icon
+                            link
+                            name={copied ? "clipboard check" : "clipboard list"}
+                            onClick={() => handleCopyClick()}
+                          />
+                        }
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
               </Message>
               <Segment attached>
                 {loading && (
