@@ -21,6 +21,6 @@ export interface Card {
   name: string;
 }
 
-export interface Response extends Error, List<Card> {
+export interface ScryfallResponse extends Error, List<Card> {
   object: "error" | "list";
 }
