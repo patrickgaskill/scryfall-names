@@ -8,7 +8,7 @@ import {
   Message,
   Popup,
   Icon,
-  Progress
+  Progress,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { Card, ScryfallResponse } from "./types";
@@ -33,7 +33,7 @@ const initialState: State = {
   warnings: [],
   error: null,
   cards: [],
-  totalCards: null
+  totalCards: null,
 };
 
 function reducer(state: State, action: Action) {
@@ -46,7 +46,7 @@ function reducer(state: State, action: Action) {
       return {
         ...state,
         cards: [...state.cards, ...cards],
-        totalCards
+        totalCards,
       };
     }
     case "warning": {
@@ -70,7 +70,7 @@ function App() {
   const [copied, setCopied] = useState(false);
   const [
     { loading, warnings, error, cards, totalCards },
-    dispatch
+    dispatch,
   ] = useReducer(reducer, initialState);
 
   async function fetchScryfall(url: string) {
@@ -82,7 +82,7 @@ function App() {
       has_more,
       next_page,
       total_cards,
-      warnings
+      warnings,
     }: ScryfallResponse = await response.json();
 
     if (object === "error") {
@@ -93,7 +93,7 @@ function App() {
     dispatch({
       type: "success",
       cards: data,
-      totalCards: total_cards
+      totalCards: total_cards,
     });
 
     if (warnings) {
@@ -143,7 +143,7 @@ function App() {
                   icon="search"
                   placeholder="Enter a Scryfall query, like t:goblin"
                   value={query}
-                  onChange={event => setQuery(event.target.value)}
+                  onChange={(event) => setQuery(event.target.value)}
                 />
               </Form.Field>
             </Form>
@@ -187,7 +187,7 @@ function App() {
                     attached="top"
                   />
                 )}
-                {cards.map(card => (
+                {cards.map((card) => (
                   <Fragment key={card.id}>
                     <span>{card.name}</span>
                     <br />
