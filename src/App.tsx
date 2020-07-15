@@ -111,14 +111,16 @@ function App() {
     event.preventDefault();
     dispatch({ type: "submit" });
     try {
-      await fetchScryfall(`https://api.scryfall.com/cards/search?q=${query}`);
+      await fetchScryfall(
+        `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}`
+      );
     } catch (e) {
       dispatch({ type: "error", error: e.message });
     }
   }
 
   async function handleCopyClick() {
-    await navigator.clipboard.writeText(cards.join("\n"));
+    await navigator.clipboard.writeText(cards.map((c) => c.name).join("\n"));
     setCopied(true);
   }
 
