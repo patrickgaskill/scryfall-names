@@ -35,30 +35,24 @@ const initialState: State = {
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
-    case "submit": {
+    case "submit":
       return { ...initialState, loading: true };
-    }
-    case "success": {
-      const { cards, totalCards } = action;
+
+    case "success":
       return {
         ...state,
-        cards: [...state.cards, ...cards],
-        totalCards,
+        cards: [...state.cards, ...action.cards],
+        totalCards: action.totalCards,
       };
-    }
-    case "warning": {
+
+    case "warning":
       return { ...state, warnings: [...state.warnings, ...action.warnings] };
-    }
-    case "finished": {
+
+    case "finished":
       return { ...state, loading: false };
-    }
-    case "error": {
-      const { error } = action;
-      return { ...state, loading: false, error };
-    }
-    default: {
-      throw new Error();
-    }
+
+    case "error":
+      return { ...state, loading: false, error: action.error };
   }
 }
 
@@ -68,35 +62,28 @@ export default function Home(): JSX.Element {
   const [{ loading, warnings, error, cards, totalCards }, dispatch] =
     useReducer(reducer, initialState);
 
-  async function fetchScryfall(url: string) {
-    const response = await fetch(url);
-    const {
-      object,
-      details,
-      data,
-      has_more,
-      next_page,
-      total_cards,
-      warnings,
-    }: ScryfallResponse = await response.json();
+  async function fetchFromScryfall(url: string) {
+    const response = (await fetch(url).then((response) =>
+      response.json()
+    )) as ScryfallResponse;
 
-    if (object === "error") {
-      dispatch({ type: "error", error: details });
+    if (response.object === "error") {
+      dispatch({ type: "error", error: response.details });
       return;
     }
 
     dispatch({
       type: "success",
-      cards: data,
-      totalCards: total_cards,
+      cards: response.data,
+      totalCards: response.total_cards,
     });
 
-    if (warnings) {
-      dispatch({ type: "warning", warnings });
+    if (response.warnings) {
+      dispatch({ type: "warning", warnings: response.warnings });
     }
 
-    if (has_more) {
-      setTimeout(() => fetchScryfall(next_page), 50);
+    if (response.has_more) {
+      setTimeout(() => fetchFromScryfall(response.next_page), 50);
     } else {
       dispatch({ type: "finished" });
     }
@@ -106,7 +93,7 @@ export default function Home(): JSX.Element {
     event.preventDefault();
     dispatch({ type: "submit" });
     try {
-      await fetchScryfall(
+      await fetchFromScryfall(
         `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}`
       );
     } catch (e) {

@@ -1,27 +1,28 @@
 // https://scryfall.com/docs/api/errors
-export interface Error {
+export type Error = {
+  object: "error";
   status: number;
   code: string;
   details: string;
-  type: string;
-  warnings: string[];
-}
+  type?: string;
+  warnings?: string[];
+};
 
 // https://scryfall.com/docs/api/lists
-export interface List<T> {
+export type List<T> = {
+  object: "list";
   data: T[];
   has_more: boolean;
-  next_page: string; // URI
-  total_cards: number;
-  warnings: string[];
-}
+  next_page?: string;
+  total_cards?: number;
+  warnings?: string[];
+};
 
 // https://scryfall.com/docs/api/cards
-export interface Card {
-  id: string; // UUID
+export type Card = {
+  object: "card";
+  id: string;
   name: string;
-}
+};
 
-export interface ScryfallResponse extends Error, List<Card> {
-  object: "error" | "list";
-}
+export type ScryfallResponse = Error | List<Card>;
