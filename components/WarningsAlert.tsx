@@ -1,4 +1,4 @@
-import ExclamationIcon from "./ExclamationIcon";
+import { ExclamationIcon } from "@heroicons/react/outline";
 
 type Props = {
   warnings: string[];
@@ -9,7 +9,7 @@ export default function WarningsAlert({ warnings }: Props): JSX.Element {
     <div className="px-4 py-2 text-yellow-800 bg-yellow-500 bg-opacity-10 border-0 rounded-md">
       <div className="flex gap-4">
         <div className="text-yellow-500">
-          <ExclamationIcon />
+          <ExclamationIcon className="w-6 h-6 text-current" />
         </div>
         <div className="self-center text-sm">
           {warnings.length > 1 ? (
