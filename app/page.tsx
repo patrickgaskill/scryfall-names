@@ -5,17 +5,26 @@ import { Progress } from "@/components/ui/progress";
 import { initialState, reducer } from "@/lib/reducer";
 import { fetchFromScryfall } from "@/lib/utils";
 import { ClipboardCopy, OctagonX, TriangleAlert } from "lucide-react";
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
 
 export default function Home() {
   const [{ cards, totalCards, warnings, error, loading }, dispatch] =
     useReducer(reducer, initialState);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   function handleSubmit(query: string) {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
     dispatch({ type: "submitted" });
     fetchFromScryfall(
       `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}`,
       dispatch,
+      signal,
     );
   }
 
@@ -24,6 +33,7 @@ export default function Home() {
     const names = cards.map((card) => card.name).join("\n");
     await navigator.clipboard.writeText(names);
   }
+
   // `max` prop in Progress is not working:
   // https://github.com/shadcn-ui/ui/pull/3471
   const progressValue = totalCards

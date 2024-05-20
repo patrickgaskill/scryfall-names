@@ -9,13 +9,17 @@ export function cn(...inputs: ClassValue[]) {
 export async function fetchFromScryfall(
   url: string,
   dispatch: (action: Action) => void,
+  signal: AbortSignal,
 ) {
   let response: Scryfall.Response;
 
   try {
-    response = await fetch(url).then((response) => response.json());
+    response = await fetch(url, { signal }).then((response) => response.json());
   } catch (e) {
-    dispatch({ type: "failed", error: (e as Error).message });
+    const error = e as Error;
+    if (error.name !== "AbortError") {
+      dispatch({ type: "failed", error: error.message });
+    }
     return;
   }
 
@@ -42,7 +46,7 @@ export async function fetchFromScryfall(
     if (response.has_more) {
       setTimeout(() => {
         if (response.next_page) {
-          fetchFromScryfall(response.next_page, dispatch);
+          fetchFromScryfall(response.next_page, dispatch, signal);
         }
       }, 50);
     } else {
