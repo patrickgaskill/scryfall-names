@@ -55,8 +55,8 @@ export default function Home() {
           <AlertTitle>Warnings</AlertTitle>
           <AlertDescription>
             <ul>
-              {warnings.map((warning) => (
-                <li>{warning}</li>
+              {warnings.map((warning, index) => (
+                <li key={index}>{warning}</li>
               ))}
             </ul>
           </AlertDescription>
