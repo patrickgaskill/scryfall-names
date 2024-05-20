@@ -22,7 +22,6 @@ export const initialState: State = {
 };
 
 export function reducer(state: State, action: Action) {
-  console.log("action", action);
   switch (action.type) {
     case "submitted": {
       return { ...initialState, loading: true };
