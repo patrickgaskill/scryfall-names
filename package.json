@@ -6,27 +6,35 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint pages components  --ext .ts,.tsx,.js,.jsx"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@heroicons/react": "^1.0.4",
-    "next": "11.1.4",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "@radix-ui/react-progress": "^1.0.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.378.0",
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/react": "^17.0.6",
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
-    "autoprefixer": "^10.2.5",
-    "eslint": "^7.26.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "postcss": "^8.3.0",
-    "prettier": "2.3.0",
-    "prettier-plugin-tailwind": "^2.2.10",
-    "tailwindcss": "^2.1.2",
-    "typescript": "^4.2.4"
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "eslint-config-prettier": "^9.1.0",
+    "postcss": "^8",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
   }
 }
