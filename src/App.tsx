@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useReducer } from "react";
 import {
   Container,
+  Grid,
   Segment,
   Header,
   Form,
@@ -8,7 +9,7 @@ import {
   Progress
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import { Response } from "./types";
+import { ScryfallResponse } from "./types";
 
 type State = {
   loading: boolean;
@@ -79,7 +80,7 @@ function App() {
       next_page,
       total_cards,
       warnings
-    }: Response = await response.json();
+    }: ScryfallResponse = await response.json();
 
     if (object === "error") {
       dispatch({ type: "error", error: details });
@@ -97,7 +98,7 @@ function App() {
     }
 
     if (has_more) {
-      window.setTimeout(() => fetchScryfall(next_page), 50);
+      setTimeout(() => fetchScryfall(next_page), 50);
     } else {
       dispatch({ type: "finished" });
     }
@@ -115,49 +116,55 @@ function App() {
 
   return (
     <Container text>
-      <Segment basic>
-        <Header>Fetch a list of card names from Scryfall</Header>
-        <Form
-          onSubmit={handleSubmit}
-          warning={warnings.length > 0}
-          error={!!error}
-        >
-          <Form.Field>
-            <Form.Input
-              loading={loading}
-              icon="search"
-              placeholder="Enter a Scryfall query, like t:goblin"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-            />
-          </Form.Field>
-        </Form>
-        {error && <Message error content={error} />}
-        {warnings.length > 0 && <Message warning list={warnings} />}
-      </Segment>
-      {totalCards && (
-        <div>
-          <Message attached>
-            {totalCards} {totalCards > 1 ? "cards" : "card"} found.
-          </Message>
-          <Segment attached>
-            {loading && (
-              <Progress
-                indicating
-                total={totalCards}
-                value={cards.length}
-                attached="top"
-              />
-            )}
-            {cards.map(name => (
-              <Fragment key={name}>
-                <span>{name}</span>
-                <br />
-              </Fragment>
-            ))}
-          </Segment>
-        </div>
-      )}
+      <Grid padded>
+        <Grid.Row>
+          <Grid.Column>
+            <Header>Fetch a list of card names from Scryfall</Header>
+            <Form
+              onSubmit={handleSubmit}
+              warning={warnings.length > 0}
+              error={!!error}
+            >
+              <Form.Field>
+                <Form.Input
+                  loading={loading}
+                  icon="search"
+                  placeholder="Enter a Scryfall query, like t:goblin"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                />
+              </Form.Field>
+            </Form>
+            {error && <Message error content={error} />}
+            {warnings.length > 0 && <Message warning list={warnings} />}
+          </Grid.Column>
+        </Grid.Row>
+        {totalCards && (
+          <Grid.Row>
+            <Grid.Column>
+              <Message attached>
+                {totalCards} {totalCards > 1 ? "cards" : "card"} found.
+              </Message>
+              <Segment attached>
+                {loading && (
+                  <Progress
+                    indicating
+                    total={totalCards}
+                    value={cards.length}
+                    attached="top"
+                  />
+                )}
+                {cards.map(name => (
+                  <Fragment key={name}>
+                    <span>{name}</span>
+                    <br />
+                  </Fragment>
+                ))}
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        )}
+      </Grid>
     </Container>
   );
 }
