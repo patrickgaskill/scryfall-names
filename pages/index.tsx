@@ -1,11 +1,13 @@
+import {
+  ClipboardCheckIcon,
+  ClipboardCopyIcon,
+  SearchIcon,
+} from "@heroicons/react/outline";
 import Head from "next/head";
 import { useEffect, useReducer, useState } from "react";
 
-import ClipboardCheckIcon from "../components/ClipboardCheckIcon";
-import ClipboardCopyIcon from "../components/ClipboardCopyIcon";
 import ErrorAlert from "../components/ErrorAlert";
 import ProgressBar from "../components/ProgressBar";
-import SearchIcon from "../components/SearchIcon";
 import Spinner from "../components/Spinner";
 import WarningsAlert from "../components/WarningsAlert";
 import { Card, ScryfallResponse } from "../types";
@@ -126,7 +128,7 @@ export default function Home(): JSX.Element {
           <div className="relative text-gray-400">
             <span className="absolute inset-y-0 left-0 flex items-center pl-2">
               <button type="submit" className="focus:outline-none">
-                <SearchIcon />
+                <SearchIcon className="w-6 h-6 text-current" />
               </button>
             </span>
             <input
@@ -160,7 +162,11 @@ export default function Home(): JSX.Element {
             {totalCards} {totalCards !== 1 ? "cards" : "card"}
             {navigator.clipboard && (
               <div className="cursor-pointer" onClick={handleCopyClick}>
-                {copied ? <ClipboardCheckIcon /> : <ClipboardCopyIcon />}
+                {copied ? (
+                  <ClipboardCheckIcon className="w-6 h-6 text-current" />
+                ) : (
+                  <ClipboardCopyIcon className="w-6 h-6 text-current" />
+                )}
               </div>
             )}
           </div>
