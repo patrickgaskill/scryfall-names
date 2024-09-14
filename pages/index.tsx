@@ -115,7 +115,9 @@ export default function Home(): JSX.Element {
   }
 
   async function handleCopyClick() {
-    await navigator.clipboard.writeText(cards.map((c) => c.name).join("\n"));
+    if (!navigator.clipboard) return;
+    const names = cards.map((card) => card.name).join("\n");
+    await navigator.clipboard.writeText(names);
     setCopied(true);
   }
 
@@ -169,9 +171,11 @@ export default function Home(): JSX.Element {
         <main className="text-gray-900 border border-gray-300 rounded">
           <div className="flex items-center justify-between px-4 py-2 text-sm bg-gray-100 border-b border-gray-300">
             {totalCards} {totalCards !== 1 ? "cards" : "card"}
-            <div className="cursor-pointer" onClick={handleCopyClick}>
-              {copied ? <ClipboardCheckIcon /> : <ClipboardCopyIcon />}
-            </div>
+            {navigator.clipboard && (
+              <div className="cursor-pointer" onClick={handleCopyClick}>
+                {copied ? <ClipboardCheckIcon /> : <ClipboardCopyIcon />}
+              </div>
+            )}
           </div>
           <div className="relative">
             {loading && (
