@@ -20,7 +20,7 @@ type State = {
 
 type Action =
   | { type: "submit" }
-  | { type: "success"; cards: string[]; totalCards: number; warnings: string[] }
+  | { type: "success"; cards: string[]; totalCards: number }
   | { type: "warning"; warnings: string[] }
   | { type: "finished" }
   | { type: "error"; error: string };
@@ -89,8 +89,7 @@ function App() {
     dispatch({
       type: "success",
       cards: data.map(card => card.name),
-      totalCards: total_cards,
-      warnings
+      totalCards: total_cards
     });
 
     if (warnings) {
