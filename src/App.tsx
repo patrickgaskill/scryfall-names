@@ -8,8 +8,24 @@ import {
   Progress
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
+import { Response } from "./types";
 
-const initialState = {
+type State = {
+  loading: boolean;
+  warnings: string[];
+  error: string | null;
+  cards: string[];
+  totalCards: number | null;
+};
+
+type Action =
+  | { type: "submit" }
+  | { type: "success"; cards: string[]; totalCards: number; warnings: string[] }
+  | { type: "warning"; warnings: string[] }
+  | { type: "finished" }
+  | { type: "error"; error: string };
+
+const initialState: State = {
   loading: false,
   warnings: [],
   error: null,
@@ -17,7 +33,7 @@ const initialState = {
   totalCards: null
 };
 
-function reducer(state, action) {
+function reducer(state: State, action: Action) {
   switch (action.type) {
     case "submit": {
       return { ...initialState, loading: true };
@@ -53,7 +69,7 @@ function App() {
     dispatch
   ] = useReducer(reducer, initialState);
 
-  async function fetchScryfall(url) {
+  async function fetchScryfall(url: string) {
     const response = await fetch(url);
     const {
       object,
@@ -63,7 +79,7 @@ function App() {
       next_page,
       total_cards,
       warnings
-    } = await response.json();
+    }: Response = await response.json();
 
     if (object === "error") {
       dispatch({ type: "error", error: details });
@@ -88,7 +104,7 @@ function App() {
     }
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     dispatch({ type: "submit" });
     try {
@@ -120,7 +136,7 @@ function App() {
         {error && <Message error content={error} />}
         {warnings.length > 0 && <Message warning list={warnings} />}
       </Segment>
-      {cards.length > 0 && (
+      {totalCards && (
         <div>
           {totalCards && (
             <Message attached>
