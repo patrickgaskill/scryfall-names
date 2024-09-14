@@ -138,11 +138,9 @@ function App() {
       </Segment>
       {totalCards && (
         <div>
-          {totalCards && (
-            <Message attached>
-              {totalCards} {totalCards > 1 ? "cards" : "card"} found.
-            </Message>
-          )}
+          <Message attached>
+            {totalCards} {totalCards > 1 ? "cards" : "card"} found.
+          </Message>
           <Segment attached>
             {loading && (
               <Progress
@@ -152,9 +150,9 @@ function App() {
                 attached="top"
               />
             )}
-            {cards.map(card => (
-              <Fragment key={card}>
-                <span>{card}</span>
+            {cards.map(name => (
+              <Fragment key={name}>
+                <span>{name}</span>
                 <br />
               </Fragment>
             ))}
