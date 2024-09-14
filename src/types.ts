@@ -18,6 +18,7 @@ export interface List<T> {
 
 // https://scryfall.com/docs/api/cards
 export interface Card {
+  id: string; // UUID
   name: string;
 }
 
