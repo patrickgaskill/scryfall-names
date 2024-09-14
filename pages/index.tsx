@@ -124,13 +124,13 @@ export default function Home(): JSX.Element {
   }, [cards]);
 
   return (
-    <div className="flex flex-col gap-8 mx-auto my-8 max-w-prose">
+    <div className="grid gap-8 p-4 max-w-sm auto-rows-min md:mx-auto md:p-8 md:max-w-prose">
       <Head>
         <title>Scryfall Names Fetcher</title>
       </Head>
 
       <header>
-        <h1 className="mb-2 text-gray-900 text-2xl font-semibold">
+        <h1 className="mb-2 text-gray-900 text-xl font-semibold md:text-2xl">
           Fetch card names from Scryfall
         </h1>
         <form onSubmit={handleSubmit}>
@@ -143,11 +143,13 @@ export default function Home(): JSX.Element {
             <input
               type="search"
               spellCheck="false"
+              autoComplete="none"
+              autoCapitalize="none"
               disabled={loading}
               placeholder="Enter a Scryfall query, like t:goblin"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              className="p-2 pl-10 w-full text-gray-700 text-sm border border-gray-300 rounded focus:outline-none"
+              className="p-2 pl-10 w-full text-gray-700 border border-gray-300 rounded focus:outline-none appearance-none"
             />
           </div>
         </form>
